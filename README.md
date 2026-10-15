@@ -31,7 +31,7 @@
 ## 快速开始
 
 ```bash
-git clone https://github.com/<your-name>/mcd-yearbook.git
+git clone https://github.com/Calvino-Y/mcd-yearbook.git
 cd mcd-yearbook
 
 # 1. 领取免费的麦当劳 MCP Token（手机号登录，控制台点激活）
@@ -46,7 +46,9 @@ python scripts/build_yearbook.py
 python scripts/render_yearbook.py       # -> docs/index.html
 ```
 
-打开 `docs/index.html`，或者开启 GitHub Pages（Settings → Pages → `main` 分支 `/docs`）在线看。
+在线年报已部署在 GitHub Pages：https://calvino-y.github.io/mcd-yearbook/
+
+本地看：直接打开 `docs/index.html`。
 
 ## 诚实声明（这部分请务必读）
 
@@ -99,7 +101,7 @@ mcd-yearbook/
 ## 作为 WorkBuddy Skill 安装
 
 ```bash
-git clone https://github.com/<your-name>/mcd-yearbook.git \
+git clone https://github.com/Calvino-Y/mcd-yearbook.git \
   ~/.workbuddy/skills/mcd-yearbook
 ```
 
