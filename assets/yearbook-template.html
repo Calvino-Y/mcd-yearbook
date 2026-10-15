@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的麦门年报 · 真实订单数据</title>
+<meta name="description" content="基于麦当劳 MCP 返回的真实历史订单，生成一份可以截图分享的麦门年报。">
+<style>
+:root{
+  --red:#da291c; --red-dark:#a81f15; --yellow:#ffc72c; --yellow-deep:#e8a800;
+  --cream:#fff6e2; --cream-2:#ffefd0; --ink:#1a1410; --ink-soft:#5c4f45;
+  --radius:20px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:"SF Mono",ui-monospace,"Cascadia Mono","Roboto Mono",Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);color:var(--ink);line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.sec{padding:74px 0}
+.sec.red{background:var(--red);color:var(--cream)}
+.sec.yellow{background:var(--yellow);color:var(--ink)}
+.sec.dark{background:#161210;color:var(--cream)}
+.sec.dark .muted{color:#a89888}
+.muted{color:var(--ink-soft)}
+
+/* ---------- hero ---------- */
+.hero{background:var(--red);color:var(--cream);padding:86px 0 70px;text-align:center}
+.badge{display:inline-block;background:var(--yellow);color:var(--ink);font-size:12.5px;
+  font-weight:600;padding:6px 15px;border-radius:999px;letter-spacing:.04em}
+.hero h1{font-size:clamp(38px,8vw,74px);line-height:1.05;font-weight:700;letter-spacing:-.03em;margin:22px 0 10px}
+.hero .range{font-size:15px;opacity:.82;font-family:var(--mono)}
+.bignum{margin-top:40px}
+.bignum .l{font-size:13px;letter-spacing:.16em;opacity:.75;text-transform:uppercase}
+.bignum .v{font-size:clamp(64px,14vw,132px);font-weight:700;line-height:.95;letter-spacing:-.04em}
+.bignum .v i{font-style:normal;font-size:.34em;font-weight:600;vertical-align:.28em;margin-right:.08em}
+.hero .sub{margin-top:14px;font-size:15px;opacity:.85}
+
+/* ---------- metric grid ---------- */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:40px}
+.metric{background:var(--cream-2);border-radius:var(--radius);padding:24px 22px;border:2px solid var(--ink)}
+.metric.dark{background:#241d18;border-color:transparent}
+.metric .k{font-size:12.5px;opacity:.68;letter-spacing:.03em}
+.metric .v{font-size:34px;font-weight:700;margin-top:8px;letter-spacing:-.03em;line-height:1.1}
+.metric .v small{font-size:14px;font-weight:500;opacity:.6;margin-left:2px}
+.metric.dark .k{color:#a89888}.metric.dark .v{color:var(--cream)}
+
+/* ---------- section head ---------- */
+.tag{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+.sec h2{font-size:clamp(26px,4.4vw,42px);font-weight:700;letter-spacing:-.025em;margin-top:12px;line-height:1.15}
+.sec .lead{margin-top:14px;font-size:15.5px;max-width:620px;opacity:.82}
+
+/* ---------- item bar list ---------- */
+.items{margin-top:38px;display:flex;flex-direction:column;gap:12px}
+.item{background:rgba(255,255,255,.5);border-radius:14px;padding:16px 20px;display:grid;
+  grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.item .rk{font-family:var(--mono);font-weight:700;font-size:15px;opacity:.5;width:26px}
+.item .nm{font-size:15.5px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .mt{font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.item .mt b{font-size:17px}
+.track{grid-column:1/-1;height:8px;background:rgba(0,0,0,.1);border-radius:4px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--red);border-radius:4px}
+
+/* ---------- hour chart ---------- */
+.chart{background:rgba(255,255,255,.55);border-radius:var(--radius);padding:26px 22px 18px;margin-top:36px}
+.buckets{display:flex;gap:8px;margin-bottom:26px;flex-wrap:wrap}
+.buckets span{font-size:13px;padding:7px 14px;border-radius:999px;background:rgba(0,0,0,.08);opacity:.55}
+.buckets span.on{background:var(--ink);color:var(--cream);opacity:1;font-weight:600}
+svg{display:block;width:100%;height:auto;overflow:visible}
+
+/* ---------- stores ---------- */
+.stores{margin-top:36px;display:flex;flex-direction:column;gap:14px}
+.store{background:#241d18;border-radius:var(--radius);padding:24px 26px}
+.store .top{display:flex;justify-content:space-between;gap:16px;align-items:baseline;flex-wrap:wrap}
+.store .nm{font-size:16px;font-weight:600}
+.store .ct{font-family:var(--mono);font-size:15px;color:var(--yellow)}
+.store .bar{height:7px;background:rgba(255,255,255,.12);border-radius:4px;margin-top:16px;overflow:hidden}
+.store .bar i{display:block;height:100%;background:var(--yellow);border-radius:4px}
+
+/* ---------- equivalence ---------- */
+.equiv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:38px}
+.card{background:var(--cream-2);border:2px solid var(--ink);border-radius:var(--radius);padding:26px 24px}
+.card .emo{font-size:34px;line-height:1}
+.card .v{font-size:40px;font-weight:700;margin-top:16px;letter-spacing:-.03em;line-height:1}
+.card .v small{font-size:15px;font-weight:600;margin-left:3px}
+.card .k{font-size:13px;color:var(--ink-soft);margin-top:9px}
+.note{margin-top:22px;background:rgba(218,41,28,.09);border-left:3px solid var(--red);
+  border-radius:0 12px 12px 0;padding:15px 19px;font-size:13.5px;color:var(--ink-soft)}
+
+/* ---------- persona ---------- */
+.persona{margin-top:44px;background:var(--cream);color:var(--ink);border-radius:26px;padding:46px 40px;text-align:center}
+.persona .lab{font-size:12.5px;letter-spacing:.2em;opacity:.55;text-transform:uppercase}
+.persona .name{font-size:clamp(30px,6.2vw,54px);font-weight:700;letter-spacing:-.03em;margin:16px 0 18px;line-height:1.1}
+.persona .why{font-size:15px;opacity:.75;max-width:520px;margin:0 auto}
+.persona .share{margin-top:30px;display:inline-block;background:var(--ink);color:var(--cream);
+  font-size:13.5px;font-weight:600;padding:12px 26px;border-radius:999px}
+
+footer{background:#161210;color:#8a7a6d;padding:44px 0;font-size:12.5px}
+footer a{color:#c9b8a6;text-decoration:none}
+footer p+p{margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="hero sec">
+  <div class="wrap">
+    <span class="badge">基于麦当劳 MCP 真实订单数据</span>
+    <h1>我的麦门年报</h1>
+    <div class="range" id="pRange">–</div>
+    <div class="bignum">
+      <div class="l">累计消费</div>
+      <div class="v num"><i>¥</i><span id="pSpend">–</span></div>
+    </div>
+    <div class="sub" id="pSub">–</div>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="tag">Overview</div>
+    <h2>先看几个硬数字</h2>
+    <div class="metrics" id="mGrid"></div>
+  </div>
+</section>
+
+<section class="sec yellow">
+  <div class="wrap">
+    <div class="tag">Signature Order</div>
+    <h2>你的本命，是它</h2>
+    <p class="lead">把所有订单拆到单品粒度，排出来是这样的。第一名和第二名之间的差距，就是习惯的力量。</p>
+    <div class="items" id="iList"></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="tag">When</div>
+    <h2>你总在什么时候吃麦当劳</h2>
+    <p class="lead">把每一笔订单的下单时间铺到 24 小时轴上，你的作息会自己显形。</p>
+    <div class="chart">
+      <div class="buckets" id="bBuckets"></div>
+      <svg id="hourChart" viewBox="0 0 960 200" role="img" aria-label="24 小时下单分布"></svg>
+    </div>
+  </div>
+</section>
+
+<section class="sec dark">
+  <div class="wrap">
+    <div class="tag">Where</div>
+    <h2>你的麦门足迹</h2>
+    <div class="stores" id="sList"></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="tag">Nutrition</div>
+    <h2>这顿麦门，到底吃了多少</h2>
+    <p class="lead">把订单里的每一件单品和官方营养表对上号，再换算成你更有体感的单位。</p>
+    <div class="equiv" id="eGrid"></div>
+    <div class="note" id="eNote"></div>
+  </div>
+</section>
+
+<section class="sec red">
+  <div class="wrap">
+    <div class="tag" style="opacity:.75">Persona</div>
+    <h2>麦门人格认证</h2>
+    <div class="persona">
+      <div class="lab">You are</div>
+      <div class="name" id="perName">–</div>
+      <div class="why" id="perWhy">–</div>
+      <div class="share" id="perShare">截图这一张，就是你的麦门名片</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b>数据来源</b>：订单来自麦当劳 MCP <code>order-list</code>，营养成分来自 <code>list-nutrition-foods</code>，均为真实接口返回。订单仅包含 MCP 可返回的近期记录，不等于全部消费历史。</p>
+    <p><b>诚实声明</b>：并非所有单品都能在官方营养表中找到对应项（例如「培根芝士双牛堡」），因此营养统计只计入匹配成功的部分，覆盖率已在页面标明。我们不填充估算值。</p>
+    <p><b>免责声明</b>：本项目为麦当劳程序员节创意开发大赛参赛作品，由参赛者独立开发，非麦当劳官方产品。输出仅供参考，不构成营养或医疗建议。</p>
+    <p style="margin-top:14px">Made with McDonald's China MCP · <a href="https://github.com/M-China/mcd-mcp-server">mcd-mcp-server</a></p>
+  </div>
+</footer>
+
+<script>
+const DATA = /*__DATA__*/;
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n).toLocaleString('zh-CN');
+
+/* ---------- hero ---------- */
+$('pRange').textContent = `${DATA.period.first} — ${DATA.period.last} · 共 ${DATA.period.spanDays} 天`;
+$('pSpend').textContent = fmt(DATA.headline.totalSpend);
+$('pSub').textContent = `${DATA.headline.orderCount} 单 · 平均每单 ¥${DATA.headline.avgPerOrder} · 共吃掉 ${DATA.headline.itemCount} 件餐品`;
+
+/* ---------- metrics ---------- */
+const H = DATA.headline, N = DATA.nutrition;
+const metrics = [
+  {k:'累计消费', v:'¥'+fmt(H.totalSpend)},
+  {k:'订单数', v:H.orderCount, s:'单'},
+  {k:'平均每单', v:'¥'+H.avgPerOrder},
+  {k:'吃掉餐品', v:H.itemCount, s:'件'},
+  {k:'尝过种类', v:H.distinctItems, s:'种'},
+  {k:'月均下单', v:H.ordersPerMonth, s:'单'},
+];
+$('mGrid').innerHTML = metrics.map(m=>
+  `<div class="metric"><div class="k">${m.k}</div><div class="v num">${m.v}${m.s?`<small>${m.s}</small>`:''}</div></div>`).join('');
+
+/* ---------- top items ---------- */
+const maxQty = DATA.topItems[0].qty;
+$('iList').innerHTML = DATA.topItems.map((it,i)=>`
+  <div class="item">
+    <span class="rk">${String(i+1).padStart(2,'0')}</span>
+    <span class="nm">${it.name}</span>
+    <span class="mt"><b>×${it.qty}</b> · ${it.share}%</span>
+    <span class="track"><i style="width:${it.qty/maxQty*100}%"></i></span>
+  </div>`).join('');
+
+/* ---------- time ---------- */
+/* 注意：这里不能叫 top。经典脚本的顶层 const 会与 window.top 这类
+   不可配置的全局属性冲突，直接 SyntaxError——而且是整段脚本都不执行，
+   页面上没有任何报错提示。命名时避开 window 上的既有属性。 */
+const topBucket = [...DATA.timeBuckets].sort((a,b)=>b.orders-a.orders)[0];
+$('bBuckets').innerHTML = DATA.timeBuckets.map(b=>
+  `<span class="${b.name===topBucket.name&&b.orders>0?'on':''}">${b.name} ${b.orders}</span>`).join('');
+
+(function(){
+  const svg=$('hourChart'), W=960, Hh=200, P={l:8,r:8,t:16,b:30};
+  const hs=DATA.hourHistogram, mx=Math.max(...hs.map(h=>h.orders),1);
+  const bw=(W-P.l-P.r)/24;
+  let s='';
+  for(const h of hs){
+    const bh=(h.orders/mx)*(Hh-P.t-P.b);
+    const x=P.l+h.hour*bw, y=Hh-P.b-bh;
+    const on=h.orders>0;
+    s+=`<rect x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${Math.max(bh,on?3:0).toFixed(1)}" rx="3" fill="${on?'#da291c':'rgba(0,0,0,.08)'}"><title>${h.hour}:00 · ${h.orders} 单</title></rect>`;
+    if(h.hour%3===0) s+=`<text x="${x+bw/2}" y="${Hh-10}" font-size="11.5" text-anchor="middle" fill="#5c4f45" font-family="var(--mono)">${h.hour}</text>`;
+  }
+  s+=`<line x1="${P.l}" y1="${Hh-P.b}" x2="${W-P.r}" y2="${Hh-P.b}" stroke="rgba(0,0,0,.18)" stroke-width="1"/>`;
+  svg.innerHTML=s;
+})();
+
+/* ---------- stores ---------- */
+const smax=Math.max(...DATA.stores.map(s=>s.orders));
+$('sList').innerHTML = DATA.stores.map((s,i)=>`
+  <div class="store">
+    <div class="top"><span class="nm">${String(i+1).padStart(2,'0')} · ${s.name}</span>
+      <span class="ct">${s.orders} 单 · ${s.share}%</span></div>
+    <div class="bar"><i style="width:${s.orders/smax*100}%"></i></div>
+  </div>`).join('');
+
+/* ---------- equivalence ---------- */
+const cards=[
+  {e:'🔥', v:fmt(N.energyKcal), s:'kcal', k:'已匹配部分的总热量'},
+  {e:'🥚', v:N.proteinEggEquivalent, s:'个鸡蛋', k:`相当于 ${N.protein} g 蛋白质`},
+  {e:'🥄', v:N.sodiumSaltGrams, s:'克盐', k:`${fmt(N.sodium)} mg 钠，约等量食盐`},
+];
+$('eGrid').innerHTML = cards.map(c=>
+  `<div class="card"><div class="emo">${c.e}</div><div class="v num">${c.v}<small>${c.s}</small></div><div class="k">${c.k}</div></div>`).join('');
+$('eNote').innerHTML = `<b>为什么数字看起来偏小？</b>因为 ${100-N.coverage}% 的餐品量（比如「培根芝士双牛堡」「柠檬脆脆麦旋风」）在官方营养表里没有对应条目，我们只统计了匹配上的 ${N.coverage}%——即 ${N.matchedQty}/${N.matchedQty+N.unmatchedQty} 件。少报比错报好，这是本项目对数据的态度。`;
+
+/* ---------- persona ---------- */
+$('perName').textContent = DATA.persona.label;
+$('perWhy').textContent = DATA.persona.reason;
+</script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+{
+  "source": {
+    "tool": "order-list",
+    "capturedAt": "2026-10-15T14:42:33",
+    "note": "麦当劳 MCP 返回的近期历史订单快照，字段与官方返回一致，未做任何修改",
+    "nutritionTool": "list-nutrition-foods",
+    "orderCount": 10
+  },
+  "period": {
+    "first": "2026.07.21",
+    "last": "2026.10.08",
+    "spanDays": 79
+  },
+  "headline": {
+    "totalSpend": 246.0,
+    "orderCount": 10,
+    "avgPerOrder": 24.6,
+    "itemCount": 33,
+    "distinctItems": 12,
+    "ordersPerMonth": 2.5
+  },
+  "topItems": [
+    {
+      "name": "培根芝士双牛堡",
+      "qty": 7,
+      "orders": 7,
+      "share": 21.2
+    },
+    {
+      "name": "可乐中杯",
+      "qty": 7,
+      "orders": 7,
+      "share": 21.2
+    },
+    {
+      "name": "中薯条",
+      "qty": 6,
+      "orders": 5,
+      "share": 18.2
+    },
+    {
+      "name": "大薯条",
+      "qty": 3,
+      "orders": 3,
+      "share": 9.1
+    },
+    {
+      "name": "日式鲜磨山葵酱",
+      "qty": 3,
+      "orders": 2,
+      "share": 9.1
+    },
+    {
+      "name": "草莓麦旋风",
+      "qty": 1,
+      "orders": 1,
+      "share": 3.0
+    },
+    {
+      "name": "双层吉士汉堡",
+      "qty": 1,
+      "orders": 1,
+      "share": 3.0
+    },
+    {
+      "name": "可乐麦炫酷",
+      "qty": 1,
+      "orders": 1,
+      "share": 3.0
+    }
+  ],
+  "stores": [
+    {
+      "name": "麦当劳成都万达餐厅",
+      "orders": 6,
+      "share": 60
+    },
+    {
+      "name": "麦当劳成都高新大源东天府三街新希望国际B座餐厅",
+      "orders": 4,
+      "share": 40
+    }
+  ],
+  "timeBuckets": [
+    {
+      "name": "早餐",
+      "orders": 0
+    },
+    {
+      "name": "午餐",
+      "orders": 5
+    },
+    {
+      "name": "下午茶",
+      "orders": 0
+    },
+    {
+      "name": "晚餐",
+      "orders": 4
+    },
+    {
+      "name": "夜宵",
+      "orders": 1
+    }
+  ],
+  "hourHistogram": [
+    {
+      "hour": 0,
+      "orders": 0
+    },
+    {
+      "hour": 1,
+      "orders": 0
+    },
+    {
+      "hour": 2,
+      "orders": 0
+    },
+    {
+      "hour": 3,
+      "orders": 0
+    },
+    {
+      "hour": 4,
+      "orders": 0
+    },
+    {
+      "hour": 5,
+      "orders": 0
+    },
+    {
+      "hour": 6,
+      "orders": 0
+    },
+    {
+      "hour": 7,
+      "orders": 0
+    },
+    {
+      "hour": 8,
+      "orders": 0
+    },
+    {
+      "hour": 9,
+      "orders": 0
+    },
+    {
+      "hour": 10,
+      "orders": 0
+    },
+    {
+      "hour": 11,
+      "orders": 4
+    },
+    {
+      "hour": 12,
+      "orders": 0
+    },
+    {
+      "hour": 13,
+      "orders": 1
+    },
+    {
+      "hour": 14,
+      "orders": 0
+    },
+    {
+      "hour": 15,
+      "orders": 0
+    },
+    {
+      "hour": 16,
+      "orders": 0
+    },
+    {
+      "hour": 17,
+      "orders": 0
+    },
+    {
+      "hour": 18,
+      "orders": 1
+    },
+    {
+      "hour": 19,
+      "orders": 1
+    },
+    {
+      "hour": 20,
+      "orders": 2
+    },
+    {
+      "hour": 21,
+      "orders": 1
+    },
+    {
+      "hour": 22,
+      "orders": 0
+    },
+    {
+      "hour": 23,
+      "orders": 0
+    }
+  ],
+  "monthly": [
+    {
+      "month": "2026-07",
+      "orders": 1,
+      "spend": 23.9
+    },
+    {
+      "month": "2026-08",
+      "orders": 1,
+      "spend": 27.9
+    },
+    {
+      "month": "2026-09",
+      "orders": 6,
+      "spend": 155.4
+    },
+    {
+      "month": "2026-10",
+      "orders": 2,
+      "spend": 38.8
+    }
+  ],
+  "nutrition": {
+    "coverage": 55,
+    "matchedQty": 18,
+    "unmatchedQty": 15,
+    "unmatchedNames": [
+      {
+        "name": "培根芝士双牛堡",
+        "qty": 7
+      },
+      {
+        "name": "日式鲜磨山葵酱",
+        "qty": 3
+      },
+      {
+        "name": "可乐麦炫酷",
+        "qty": 1
+      },
+      {
+        "name": "韩式甜辣酱鸡块",
+        "qty": 1
+      },
+      {
+        "name": "脆皮鸡柳",
+        "qty": 1
+      },
+      {
+        "name": "麦辣大四角",
+        "qty": 1
+      },
+      {
+        "name": "柠檬脆脆麦旋风",
+        "qty": 1
+      }
+    ],
+    "energyKcal": 4624,
+    "protein": 75,
+    "fat": 151,
+    "sodium": 2777,
+    "proteinEggEquivalent": 11,
+    "sodiumSaltGrams": 7.05
+  },
+  "persona": {
+    "label": "工作日干饭担当",
+    "reason": "最常在午餐下单（5/10 单），最爱 培根芝士双牛堡（7 次）",
+    "loyaltyPercent": 21
+  }
+}
