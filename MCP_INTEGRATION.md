@@ -102,5 +102,5 @@ data/yearbook.json
 ## 6. 隐私与合规
 
 - **本仓库不包含任何真实账号的 Token、openId 或手机号**。
-- `data/orders_raw.json` 中的 `orderId` 是订单号而非个人标识，`storeName` 是公开的门店信息，不构成个人敏感信息。如需以自己的数据运行，替换该文件即可。
+- `data/orders_raw.json` 中的 `orderId` 已全部替换为 `ORD-0001` 形式的占位符，原始订单号不随仓库公开；`storeName` 是公开的门店名称，不构成个人敏感信息。如需以自己的数据运行，替换该文件即可。
 - 年报页面默认展示的是**仓库作者自己的脱敏数据**；他人复用时通过 `build_yearbook.py` 重新生成，不会上传任何数据。
